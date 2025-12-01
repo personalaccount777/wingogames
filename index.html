@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>51Lottery — Demo Clone</title>
+  <meta name="description" content="Demo lottery site UI (static clone)" />
+
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:Inter,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial,sans-serif;
+      background:#0b1020;color:#f7f8fb;line-height:1.4;
+    }
+    a{color:inherit;text-decoration:none}
+
+    header{
+      background:linear-gradient(90deg,#0f1724 0%, #061226 100%);
+      padding:22px 18px;
+      position:sticky;top:0;z-index:40;
+      border-bottom:1px solid rgba(255,255,255,0.03)
+    }
+    .container{max-width:1100px;margin:0 auto;padding:0 18px}
+
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{
+      width:44px;height:44px;border-radius:8px;
+      background:linear-gradient(135deg,#ff6b6b,#ffd166);
+      display:flex;align-items:center;justify-content:center;
+      font-weight:700;color:#0b1020;
+    }
+
+    nav{margin-left:auto;display:flex;gap:12px;align-items:center}
+
+    .btn{
+      background:#1f2937;color:#fff;
+      padding:10px 14px;border-radius:8px;cursor:pointer;border:0;
+    }
+    .btn.outline{background:transparent;border:1px solid rgba(255,255,255,0.06)}
+
+    /* hero */
+    .hero{display:flex;gap:24px;align-items:center;padding:34px 0}
+    .hero-left{flex:1}
+
+    .jackpot{
+      background:linear-gradient(90deg,#111827 0,#0b1220 100%);
+      padding:18px;border-radius:12px;
+      border:1px solid rgba(255,255,255,0.03)
+    }
+    .jackpot h2{font-size:18px;margin-bottom:6px}
+    .jackpot .amount{font-size:32px;font-weight:800;margin-top:6px}
+
+    .hero-actions{display:flex;gap:12px;margin-top:14px}
+
+    .hero-right{width:360px}
+
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      padding:16px;border-radius:12px;
+      border:1px solid rgba(255,255,255,0.03)
+    }
+
+    .games{
+      display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+      gap:14px;margin-top:22px
+    }
+
+    .game{
+      padding:12px;border-radius:10px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));
+      border:1px solid rgba(255,255,255,0.03);
+      display:flex;gap:12px;align-items:center
+    }
+    .game .thumb{
+      width:56px;height:56px;border-radius:8px;background:#081226;
+      display:flex;align-items:center;justify-content:center;font-weight:700
+    }
+    .game h3{font-size:16px}
+    .game small{display:block;color:rgba(255,255,255,0.6);margin-top:6px}
+
+    .promo{margin-top:20px;display:flex;gap:12px}
+    .promo .col{flex:1}
+
+    footer{
+      margin-top:28px;padding:28px 0;
+      color:rgba(255,255,255,0.65);font-size:14px
+    }
+
+    @media (max-width:880px){
+      .hero{flex-direction:column}
+      .hero-right{width:100%}
+      nav{display:none}
+    }
+
+    /* modal */
+    .modal-backdrop{
+      position:fixed;inset:0;background:rgba(2,6,23,0.6);
+      display:flex;align-items:center;justify-content:center;z-index:100;
+    }
+    .modal{
+      background:#071026;padding:18px;border-radius:12px;
+      width:420px;border:1px solid rgba(255,255,255,0.03)
+    }
+    .field{margin-top:10px}
+    input[type=text],input[type=password],input[type=email]{
+      width:100%;padding:10px;border-radius:8px;
+      background:#031126;border:1px solid rgba(255,255,255,0.04);color:#fff
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="container" style="display:flex;align-items:center">
+
+    <div class="brand">
+      <div class="logo">51</div>
+      <div>
+        <div style="font-weight:700">51Lottery</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.6)">Play • Win • Withdraw</div>
+      </div>
+    </div>
+
+    <nav>
+      <a class="btn outline">How to play</a>
+      <a class="btn outline">Results</a>
+      <a class="btn">Deposit</a>
+
+      <!-- FIXED SIGN UP BUTTON -->
+      <a class="btn" id="openSignUp">Sign up</a>
+
+      <a href="https://t.me/earnslice" target="_blank" class="btn">Contact</a>
+    </nav>
+
+  </div>
+</header>
+
+<main class="container">
+
+  <section class="hero">
+    <div class="hero-left">
+
+      <div class="jackpot">
+        <h2>Next draw — 10:30 PM</h2>
+        <div class="amount" id="jackpotAmount">₹ 12,34,567</div>
+        <p style="margin-top:8px;color:rgba(255,255,255,0.6)">Guaranteed daily draw. Win big prizes.</p>
+
+        <div class="hero-actions">
+          <button class="btn" id="playNow">Play Now</button>
+          <button class="btn outline" id="howTo">How to Play</button>
+        </div>
+      </div>
+
+      <div class="games">
+        <div class="game">
+          <div class="thumb">M1</div>
+          <div><h3>Morning Draw</h3><small>Next: 09:00 AM · ₹10,000 Prize</small></div>
+        </div>
+
+        <div class="game">
+          <div class="thumb">E1</div>
+          <div><h3>Evening Draw</h3><small>Next: 06:00 PM · ₹50,000 Prize</small></div>
+        </div>
+
+        <div class="game">
+          <div class="thumb">S1</div>
+          <div><h3>Super Jackpot</h3><small>Next: Tonight · ₹10,00,000</small></div>
+        </div>
+
+        <div class="game">
+          <div class="thumb">B1</div>
+          <div><h3>Mini Game</h3><small>Instant win tickets</small></div>
+        </div>
+      </div>
+
+      <div class="promo">
+        <div class="col card">
+          <h4>Recharge Bonus</h4>
+          <p style="color:rgba(255,255,255,0.65)">Get an instant 10% bonus on ₹500+ deposit.</p>
+        </div>
+
+        <div class="col card">
+          <h4>Refer & Earn</h4>
+          <a href="https://t.me/earnslice" target="_blank" class="btn">CLICK HERE</a>
+          <p style="color:rgba(255,255,255,0.65)">Earn ₹50 for each verified signup.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <aside class="hero-right">
+      <div class="card">
+        <h4>Live Results</h4>
+        <div style="margin-top:12px">
+          <div style="display:flex;justify-content:space-between">
+            <strong>09:00 AM</strong><span>1 4 7 9 0</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:8px">
+            <strong>06:00 PM</strong><span>2 8 3 5 4</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:8px">
+            <strong>Super</strong><span>7 7 0 1 2</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <h4>Quick Top-ups</h4>
+        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn outline">UPI</button>
+          <button class="btn outline">Netbanking</button>
+          <button class="btn outline">Wallet</button>
+        </div>
+      </div>
+    </aside>
+  </section>
+
+  <footer>
+    <div style="display:flex;justify-content:space-between;flex-wrap:wrap">
+      © 2025 51Lottery Demo — Static clone only.
+      <div style="color:rgba(255,255,255,0.6)">Terms · Privacy · Support</div>
+    </div>
+  </footer>
+
+</main>
+
+<!-- HIDDEN MODAL -->
+<div id="modal" style="display:none" class="modal-backdrop">
+  <div class="modal">
+    <h3>Create account</h3>
+    <div class="field"><input placeholder="Full name" id="name" type="text"></div>
+    <div class="field"><input placeholder="Email" id="email" type="email"></div>
+    <div class="field"><input placeholder="Password" id="pwd" type="password"></div>
+
+    <div style="margin-top:12px;display:flex;gap:8px">
+      <button class="btn" id="submitSign">Sign up</button>
+      <button class="btn outline" id="closeModal">Close</button>
+    </div>
+
+    <p style="margin-top:10px;color:rgba(255,255,255,0.6);font-size:13px">
+      Demo only — no real betting.
+    </p>
+  </div>
+</div>
+
+<script>
+  const modal = document.getElementById('modal');
+
+  // SIGN UP → Redirect to your Telegram
+  document.getElementById('openSignUp')
+    .addEventListener('click', () => {
+      window.location.href = "https://t.me/earnslice";
+    });
+
+  document.getElementById('closeModal')
+    .addEventListener('click', () => modal.style.display = 'none');
+
+  document.getElementById('playNow')
+    .addEventListener('click', () => alert('Demo only'));
+
+  // Jackpot animation
+  const jackpotEl = document.getElementById('jackpotAmount');
+  let v = 1234567;
+  setInterval(() => {
+    v += Math.floor(Math.random() * 3000);
+    jackpotEl.textContent = '₹ ' + v.toLocaleString('en-IN');
+  }, 4000);
+
+  // Fake signup
+  document.getElementById('submitSign')
+    .addEventListener('click', () => {
+      const n = document.getElementById('name').value.trim();
+      if (!n) { alert('Please enter name'); return }
+      alert('Thanks ' + n + ' — demo account created');
+      modal.style.display = 'none';
+    });
+</script>
+
+</body>
+</html>
